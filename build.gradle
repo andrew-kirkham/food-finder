@@ -2,7 +2,7 @@ buildscript {
     repositories {
         jcenter()
     }
-    
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -22,6 +22,10 @@ sourceSets {
     test.resources.srcDirs = ['testresources']
 }
 
+configurations {
+    ktlint
+}
+
 repositories {
     mavenLocal()
     jcenter()
@@ -29,6 +33,8 @@ repositories {
 }
 
 dependencies {
+    ktlint "com.pinterest:ktlint:0.35.0"
+
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "io.ktor:ktor-server-cio:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
@@ -36,4 +42,22 @@ dependencies {
     compile "io.ktor:ktor-locations:$ktor_version"
     compile "io.ktor:ktor-metrics:$ktor_version"
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
+}
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    main = "com.pinterest.ktlint.Main"
+    classpath = configurations.ktlint
+    args "src/**/*.kt"
+    // to generate report in checkstyle format prepend following args:
+    // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
+    // see https://github.com/pinterest/ktlint#usage for more
+}
+check.dependsOn ktlint
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    main = "com.pinterest.ktlint.Main"
+    classpath = configurations.ktlint
+    args "-F", "src/**/*.kt"
 }
