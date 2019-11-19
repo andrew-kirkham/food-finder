@@ -6,7 +6,6 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import module
 
 class ApplicationTest {
     @Test
@@ -14,7 +13,7 @@ class ApplicationTest {
         withTestApplication({ module(testing = true) }) {
             handleRequest(HttpMethod.Get, "/").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals("HELLO WORLD!", response.content)
+                assertEquals("Hello World!", response.content)
             }
         }
     }
