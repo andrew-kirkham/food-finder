@@ -48,5 +48,4 @@ fun Application.module(testing: Boolean = false) {
     }
 }
 
-
 data class FoodRequest(val name: Food, val restaurant: Restaurant)
