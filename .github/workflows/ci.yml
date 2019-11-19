@@ -4,9 +4,7 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
     - uses: olafurpg/setup-scala@v5
@@ -14,5 +12,9 @@ jobs:
         java-version: openjdk@13
     - name: Test
       run: ./gradlew test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
     - name: Lint
       run: ./gradlew ktlint
