@@ -35,11 +35,13 @@ repositories {
 dependencies {
     ktlint "com.pinterest:ktlint:0.35.0"
 
+    compile "io.github.microutils:kotlin-logging:$kotlinLoggingVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "io.ktor:ktor-server-cio:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
     compile "io.ktor:ktor-server-core:$ktor_version"
     compile "io.ktor:ktor-locations:$ktor_version"
+    compile "io.ktor:ktor-gson:$ktor_version"
     compile "io.ktor:ktor-metrics:$ktor_version"
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
 }
