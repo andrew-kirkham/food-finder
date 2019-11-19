@@ -14,3 +14,5 @@ jobs:
         java-version: openjdk@13
     - name: Test
       run: ./gradlew test
+    - name: Lint
+      run: ./gradlew lint
