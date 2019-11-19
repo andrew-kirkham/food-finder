@@ -1,5 +1,7 @@
 package com.andrew
 
+import com.andrew.database.connectToDatabase
+import com.andrew.database.upgradeDatabase
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -18,7 +20,11 @@ import io.ktor.routing.post
 import io.ktor.routing.routing
 import java.text.DateFormat
 
-fun main(args: Array<String>): Unit = io.ktor.server.cio.EngineMain.main(args)
+fun main(args: Array<String>) {
+    connectToDatabase()
+    upgradeDatabase()
+    io.ktor.server.cio.EngineMain.main(args)
+}
 
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
@@ -42,10 +48,21 @@ fun Application.module(testing: Boolean = false) {
 
         post<FoodController.Create> {
             val request = call.receive<FoodRequest>()
-            it.create(request.name, request.restaurant)
-            call.respond(HttpStatusCode.Created)
+            val id = it.create(request.name, request.restaurant)
+            call.respond(HttpStatusCode.Created, "Created Food with id=$id")
+        }
+
+        get<RestaurantController.Search> {
+            call.respondText("Food: name=${it.search()}")
+        }
+
+        post<RestaurantController.Create> {
+            val request = call.receive<RestaurantRequest>()
+            val id = it.create(request.name)
+            call.respond(HttpStatusCode.Created, "Created Restaurant with id=$id")
         }
     }
 }
 
-data class FoodRequest(val name: Food, val restaurant: Restaurant)
+data class FoodRequest(val name: String, val restaurantId: Int)
+data class RestaurantRequest(val name: String)
