@@ -1,14 +1,18 @@
 package com.andrew
 
+import com.andrew.controllers.FoodController
+import com.andrew.controllers.RestaurantController
 import com.andrew.database.connectToDatabase
 import com.andrew.database.upgradeDatabase
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.gson.gson
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Locations
 import io.ktor.locations.get
 import io.ktor.locations.post
@@ -16,7 +20,6 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.get
-import io.ktor.routing.post
 import io.ktor.routing.routing
 import java.text.DateFormat
 
@@ -26,10 +29,11 @@ fun main(args: Array<String>) {
     io.ktor.server.cio.EngineMain.main(args)
 }
 
+@KtorExperimentalLocationsAPI
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
-    install(Locations) {
-    }
+    install(Locations)
+    install(CallLogging)
     install(ContentNegotiation) {
         gson {
             setDateFormat(DateFormat.LONG)

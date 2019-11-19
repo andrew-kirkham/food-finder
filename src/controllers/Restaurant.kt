@@ -1,7 +1,8 @@
-package com.andrew
+package com.andrew.controllers
 
 import com.andrew.database.tables.Restaurant
 import com.andrew.database.tables.RestaurantTable
+import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
 import mu.KotlinLogging
 import org.jetbrains.exposed.sql.StdOutSqlLogger
@@ -12,6 +13,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 private val logger = KotlinLogging.logger {}
 
+@KtorExperimentalLocationsAPI
 @Location("/restaurant")
 class RestaurantController {
 
