@@ -48,7 +48,7 @@ fun Application.module(testing: Boolean = false) {
 
         post<FoodController.Create> {
             val request = call.receive<FoodRequest>()
-            val id = it.create(request.name, request.restaurant)
+            val id = it.create(request.name, request.restaurantId)
             call.respond(HttpStatusCode.Created, "Created Food with id=$id")
         }
 
