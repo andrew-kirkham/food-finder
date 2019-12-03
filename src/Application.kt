@@ -43,7 +43,14 @@ fun Application.module() {
         route("/food") {
             get("/search/{name}") {
                 val name = call.parameters["name"]
-                name?.let { call.respondText("Food: name=${FoodController.searchByName(it)}") }
+                name?.let {
+                    val food = FoodController.searchByName(it)
+                    if (food.isEmpty()) {
+                        call.respond(HttpStatusCode.NotFound)
+                    } else {
+                        call.respondText("Food: name=$food")
+                    }
+                }
             }
             post("") {
                 val request = call.receive<FoodRequest>()
