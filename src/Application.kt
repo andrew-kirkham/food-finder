@@ -42,6 +42,10 @@ fun Application.module(testing: Boolean = false) {
     }
 
     routing {
+        get("/") {
+            call.respondText("Hello World!", contentType = ContentType.Text.Plain)
+        }
+
         get<FoodController.Search> {
             call.respondText("Food: name=${it.searchByName()}")
         }
