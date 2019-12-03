@@ -53,6 +53,8 @@ dependencies {
     compile("org.xerial:sqlite-jdbc:3.21.0.1")
 
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
+    testCompile "io.ktor:ktor-server-test-host:$ktor_version"
+    testCompile "io.mockk:mockk:$mockk_version"
 }
 
 detekt {
