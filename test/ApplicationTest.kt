@@ -64,7 +64,7 @@ class ApplicationTest {
     @Test
     fun createFood() {
         mockkObject(FoodController)
-        every { FoodController.createNewFoodAtRestaurant(any(), any())} returns 1
+        every { FoodController.createNewFoodAtRestaurant(any(), any()) } returns 1
         withTestApplication({ module() }) {
             handleRequest(HttpMethod.Post, "/food") {
                 addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())

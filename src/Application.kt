@@ -48,7 +48,7 @@ fun Application.module() {
                     if (food.isEmpty()) {
                         call.respond(HttpStatusCode.NotFound)
                     } else {
-                        call.respondText("Food: name=${food}")
+                        call.respondText("Food: name=$food")
                     }
                 }
             }
