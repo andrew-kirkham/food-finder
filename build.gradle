@@ -31,10 +31,6 @@ configurations {
     ktlint
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "12"
-}
-
 repositories {
     mavenLocal()
     jcenter()
@@ -60,7 +56,7 @@ dependencies {
 }
 
 detekt {
-    toolVersion = "1.2.1"
+    toolVersion = "$detekt_version"
     input = files("src")
 }
 
