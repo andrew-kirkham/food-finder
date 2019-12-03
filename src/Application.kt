@@ -47,22 +47,22 @@ fun Application.module(testing: Boolean = false) {
         }
 
         get<FoodController.Search> {
-            call.respondText("Food: name=${it.search()}")
+            call.respondText("Food: name=${it.searchByName()}")
         }
 
         post<FoodController.Create> {
             val request = call.receive<FoodRequest>()
-            val id = it.create(request.name, request.restaurantId)
+            val id = it.createNewFoodAtRestaurant(request.name, request.restaurantId)
             call.respond(HttpStatusCode.Created, "Created Food with id=$id")
         }
 
         get<RestaurantController.Search> {
-            call.respondText("Food: name=${it.search()}")
+            call.respondText("Food: name=${it.searchByName()}")
         }
 
         post<RestaurantController.Create> {
             val request = call.receive<RestaurantRequest>()
-            val id = it.create(request.name)
+            val id = it.createNewRestaurant(request.name)
             call.respond(HttpStatusCode.Created, "Created Restaurant with id=$id")
         }
     }

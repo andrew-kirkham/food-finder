@@ -22,7 +22,7 @@ class FoodController {
 
     @Location("/{name}")
     class Search(val name: String) {
-        fun search(): List<Food> {
+        fun searchByName(): List<Food> {
             logger.info { "$name was requested" }
             return transaction {
                 addLogger(StdOutSqlLogger)
@@ -41,7 +41,7 @@ class FoodController {
         /**
          * Create a new [Food] with the given [String] name and [RestaurantTable] pk
          */
-        fun create(foodName: String, restaurant: Int): Int {
+        fun createNewFoodAtRestaurant(foodName: String, restaurant: Int): Int {
             return transaction {
                 addLogger(StdOutSqlLogger)
                 FoodTable.insert {
