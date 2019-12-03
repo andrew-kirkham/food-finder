@@ -12,14 +12,12 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.gson.gson
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Locations
-import io.ktor.locations.get
-import io.ktor.locations.post
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.get
+import io.ktor.routing.post
+import io.ktor.routing.route
 import io.ktor.routing.routing
 import java.text.DateFormat
 
@@ -29,10 +27,7 @@ fun main(args: Array<String>) {
     io.ktor.server.cio.EngineMain.main(args)
 }
 
-@KtorExperimentalLocationsAPI
-@kotlin.jvm.JvmOverloads
-fun Application.module(testing: Boolean = false) {
-    install(Locations)
+fun Application.module() {
     install(CallLogging)
     install(ContentNegotiation) {
         gson {
@@ -45,25 +40,31 @@ fun Application.module(testing: Boolean = false) {
         get("/") {
             call.respondText("Hello World!", contentType = ContentType.Text.Plain)
         }
-
-        get<FoodController.Search> {
-            call.respondText("Food: name=${it.searchByName()}")
+        route("/food") {
+            get("/search/{name}") {
+                val name = call.parameters["name"]
+                name?.let { call.respondText("Food: name=${FoodController.searchByName(it)}") }
+            }
+            post("") {
+                val request = call.receive<FoodRequest>()
+                val id =
+                    FoodController.createNewFoodAtRestaurant(request.name, request.restaurantId)
+                call.respond(HttpStatusCode.Created, "Created Food with id=$id")
+            }
         }
 
-        post<FoodController.Create> {
-            val request = call.receive<FoodRequest>()
-            val id = it.createNewFoodAtRestaurant(request.name, request.restaurantId)
-            call.respond(HttpStatusCode.Created, "Created Food with id=$id")
-        }
-
-        get<RestaurantController.Search> {
-            call.respondText("Food: name=${it.searchByName()}")
-        }
-
-        post<RestaurantController.Create> {
-            val request = call.receive<RestaurantRequest>()
-            val id = it.createNewRestaurant(request.name)
-            call.respond(HttpStatusCode.Created, "Created Restaurant with id=$id")
+        route("/restaurant") {
+            get("/search/{name}") {
+                val name = call.parameters["name"]
+                name?.let {
+                    call.respondText("Food: name=${RestaurantController.searchByName(it)}")
+                }
+            }
+            post("/create") {
+                val request = call.receive<RestaurantRequest>()
+                val id = RestaurantController.createNewRestaurant(request.name)
+                call.respond(HttpStatusCode.Created, "Created Restaurant with id=$id")
+            }
         }
     }
 }
