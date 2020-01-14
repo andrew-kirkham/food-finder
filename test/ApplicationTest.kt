@@ -1,8 +1,7 @@
-package com.andrew
-
 import com.andrew.controllers.FoodController
 import com.andrew.database.tables.Food
 import com.andrew.database.tables.Restaurant
+import com.andrew.module
 import com.google.gson.Gson
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders

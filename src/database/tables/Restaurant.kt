@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 
 object RestaurantTable : Table() {
     val id = integer("id").autoIncrement().primaryKey()
@@ -22,19 +23,27 @@ fun ResultRow.toRestaurant() = Restaurant(
     name = this[RestaurantTable.name]
 )
 
-fun getOrCreateRestaurant(restaurantName: String): Int {
-    val restaurant = loggedTransaction {
+
+/**
+ * Create a new [Restaurant] with the given [String] name and return the id
+ */
+fun createNewRestaurant(restaurantName: String): Restaurant {
+    return transaction {
+        val values = RestaurantTable.insert {
+            it[name] = restaurantName
+        }.resultedValues ?: emptyList()
+        values.map { it.toRestaurant() }.first()
+    }
+}
+
+/**
+ * Get a [Restaurant] with the given [String] name or create if it doesn't exist
+ */
+fun getOrSaveRestaurant(restaurantName: String): Restaurant {
+    val restaurant = transaction {
         RestaurantTable.select {
             RestaurantTable.name eq restaurantName
         }.map { it.toRestaurant() }.firstOrNull()
     }
-    return restaurant?.id ?: createNewRestaurant(restaurantName)
-}
-
-fun createNewRestaurant(restaurantName: String): Int {
-    return loggedTransaction {
-        RestaurantTable.insert {
-            it[name] = restaurantName
-        } get RestaurantTable.id
-    }
+    return restaurant ?: createNewRestaurant(restaurantName)
 }

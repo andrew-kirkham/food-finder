@@ -1,4 +1,4 @@
-package com.andrew.readers
+package readers
 
 import org.junit.Test
 
@@ -6,6 +6,6 @@ class PdfReaderTest {
 
     @Test
     fun testRead() {
-        PdfReader.readAndProcessPdf()
+//        PdfReader.readAndProcessPdf()
     }
 }

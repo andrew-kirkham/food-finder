@@ -20,7 +20,7 @@ object FoodController {
             (FoodTable innerJoin RestaurantTable)
                 .select {
                     FoodTable.name.eq(name) and
-                            (FoodTable.restaurantId eq RestaurantTable.id)
+                        (FoodTable.restaurantId eq RestaurantTable.id)
                 }
                 .map { Food(it[FoodTable.name], it.toRestaurant()) }
                 .toList()
