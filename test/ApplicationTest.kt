@@ -20,7 +20,7 @@ import kotlin.test.assertEquals
 
 class ApplicationTest {
 
-    private val restaurant = Restaurant("restaurant")
+    private val restaurant = Restaurant(1, "restaurant")
     private val food = Food("food", restaurant)
 
     @AfterTest

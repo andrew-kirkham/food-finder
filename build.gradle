@@ -51,7 +51,8 @@ dependencies {
     compile "io.ktor:ktor-metrics:$ktor_version"
     compile "org.jetbrains.exposed:exposed-core:$exposed_version"
     compile "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
-    compile("org.xerial:sqlite-jdbc:3.21.0.1")
+    compile "org.xerial:sqlite-jdbc:$sqlite_version"
+    compile "org.apache.pdfbox:pdfbox:$pdfbox_version"
 
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
     testCompile "io.ktor:ktor-server-test-host:$ktor_version"

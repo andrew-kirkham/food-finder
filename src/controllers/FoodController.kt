@@ -3,8 +3,8 @@ package com.andrew.controllers
 import com.andrew.database.loggedTransaction
 import com.andrew.database.tables.Food
 import com.andrew.database.tables.FoodTable
-import com.andrew.database.tables.Restaurant
 import com.andrew.database.tables.RestaurantTable
+import com.andrew.database.tables.toRestaurant
 import mu.KotlinLogging
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
@@ -20,9 +20,9 @@ object FoodController {
             (FoodTable innerJoin RestaurantTable)
                 .select {
                     FoodTable.name.eq(name) and
-                        (FoodTable.restaurantId eq RestaurantTable.id)
+                            (FoodTable.restaurantId eq RestaurantTable.id)
                 }
-                .map { Food(it[FoodTable.name], Restaurant(it[RestaurantTable.name])) }
+                .map { Food(it[FoodTable.name], it.toRestaurant()) }
                 .toList()
         }
     }

@@ -3,8 +3,8 @@ package com.andrew.controllers
 import com.andrew.database.loggedTransaction
 import com.andrew.database.tables.Restaurant
 import com.andrew.database.tables.RestaurantTable
+import com.andrew.database.tables.toRestaurant
 import mu.KotlinLogging
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 
 private val logger = KotlinLogging.logger {}
@@ -16,7 +16,7 @@ object RestaurantController {
         return loggedTransaction {
             RestaurantTable
                 .select { RestaurantTable.name.eq(name) }
-                .map { Restaurant(it[RestaurantTable.name]) }
+                .map { it.toRestaurant() }
                 .toList()
         }
     }
@@ -25,10 +25,6 @@ object RestaurantController {
      * Create a new [Restaurant] with the given [String] name
      */
     fun createNewRestaurant(restaurantName: String): Int {
-        return loggedTransaction {
-            RestaurantTable.insert {
-                it[name] = restaurantName
-            } get RestaurantTable.id
-        }
+        return createNewRestaurant(restaurantName)
     }
 }
